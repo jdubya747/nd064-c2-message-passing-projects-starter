@@ -25,15 +25,20 @@ spec:
   selector:
     matchLabels:
       service: udaconnect-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate      
   template:
     metadata:
       labels:
         service: udaconnect-api
     spec:
       containers:
-      - image: udacity/nd064-udaconnect-api:latest
+      - image: jdubya747/nd064-udaconnect-api:latest
         name: udaconnect-api
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: DB_USERNAME
           valueFrom:
