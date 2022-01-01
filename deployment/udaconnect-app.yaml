@@ -39,6 +39,7 @@ spec:
       - image: jdubya747/nd064-udaconnect-app:latest
         name: udaconnect-app
         imagePullPolicy: IfNotPresent
+
         resources:
           requests:
             memory: "128Mi"
