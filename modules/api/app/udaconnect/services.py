@@ -10,8 +10,8 @@ import grpc
 from . import people_pb2 as people_pb2
 from . import people_pb2_grpc as people_pb2_grpc
 
-logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger("udaconnect-api")
+#logging.basicConfig(level=logging.WARNING)
+#logger = logging.getLogger("udaconnect-api")
 
 #this is a comment to invode change
 

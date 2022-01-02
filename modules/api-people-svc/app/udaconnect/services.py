@@ -8,8 +8,8 @@ from app.udaconnect.schemas import PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 
-logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger("udaconnect-api")
+#logging.basicConfig(level=logging.WARNING)
+#logger = logging.getLogger("udaconnect-api")
 
 
 class PersonService:
