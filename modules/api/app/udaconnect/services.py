@@ -1,15 +1,19 @@
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List
-
+from typing import List
 from app import db
 from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
+import grpc
+from . import people_pb2 as people_pb2
+from . import people_pb2_grpc as people_pb2_grpc
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
+
+#this is a comment to invode change
 
 
 class ConnectionService:
@@ -30,8 +34,21 @@ class ConnectionService:
         ).all()
 
         # Cache all users in memory for quick lookup
-        person_map: Dict[str, Person] = {person.id: person for person in PersonService.retrieve_all()}
-
+        #person_map: Dict[str, Person] = {person.id: person for person in PersonService.retrieve_all()}
+        #channel = grpc.insecure_channel("localhost:30005")
+        #channel = grpc.insecure_channel("10.42.0.79:5005")
+        channel = grpc.insecure_channel("udaconnect-api-people-svc:5005")
+        stub = people_pb2_grpc.PeopleServiceStub(channel)
+        person_map = {}
+        peopleMessageList = stub.Get(people_pb2.Empty())
+        for peeps in peopleMessageList.people:
+            pee = Person
+            pee.id = peeps.id
+            pee.first_name = peeps.first_name
+            pee.last_name = peeps.last_name
+            pee.company_name = peeps.company_name
+            person_map[pee.id] = pee
+        #person_map: Dict[int, Person] = {person.id: person for person in stub.Get(people_pb2.Empty())}
         # Prepare arguments for queries
         data = []
         for location in locations:

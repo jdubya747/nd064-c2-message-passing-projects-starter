@@ -13,7 +13,6 @@ spec:
   - name: "5005"
     port: 5005
     targetPort: 5005
-    nodePort: 30005
   selector:
     service: udaconnect-api-people-svc
   type: NodePort
@@ -42,7 +41,7 @@ spec:
       containers:
       - image: jdubya747/nd064-udaconnect-api-people-svc:latest
         name: udaconnect-api-people-svc
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: DB_USERNAME
           valueFrom:
