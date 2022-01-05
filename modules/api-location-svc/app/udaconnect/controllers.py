@@ -14,8 +14,10 @@ DATE_FORMAT = "%Y-%m-%d"
 
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
 
+#Routes for what is being called the location servive. Get and Post for
+#locations. Posts will be published to a kafka queue with a 
+#response=202 returned immediatly after request validation.
 
-# TODO: This needs better exception handling
 
 @api.route("/locations")
 class LocationResource(Resource):

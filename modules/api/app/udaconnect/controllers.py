@@ -1,6 +1,5 @@
 from datetime import datetime
 
-#from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import ConnectionSchema
 from app.udaconnect.services import ConnectionService
 from flask import request
@@ -11,7 +10,8 @@ from typing import Optional, List
 DATE_FORMAT = "%Y-%m-%d"
 
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
-
+#Routes for what is being called the connection servive. Getting the
+#connections for a given person
 @api.route("/persons/<person_id>/connection")
 @api.param("start_date", "Lower bound of date range", _in="query")
 @api.param("end_date", "Upper bound of date range", _in="query")

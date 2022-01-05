@@ -1,0 +1,19 @@
+** Architecture goals for this sprint**
+The refactoring endeavor will be to split the monolith into microservices; introduce a GRPC message passing link; introduce a Kafka message queue.
+
+*Microservices*
+We will follow the straggler pattern to divide the monolith into distinct microservices. Note-for this sprint there maybe duplicated code. That can be refactored out in later sprints. The team will not have concern with API maintenance at this point as only a POC exists. However, in the future the team will institute policies to refrain from API change and when necessary, policies to enable backward compatible changes. These to be enforced through code reviews.
+
+After reviewing the monolith, we will split the monolith into three natural microservices. these are:
+1) People (API centered around people, the people schema, and people DB model)
+2) Location (API centered around location, the location schema and location DB model)
+3) Connection (API to retrieve lists of connections for persons. It will leverage both the people and location db data)
+
+All three will be served to clients via a respective restful API. 
+
+*GRPC*
+Additionally, there will be a need for the connection service to make a request to the people service for a list of all people. This will be implemented via GRPC since it is a service-to-service message pass, we can benefit from the increased robustness of the message structure and better performance. It requires additional development work but is a sound investment
+
+*Kafka*
+The location service exposes a restful endpoint to receive location posts. This is essentially a stream of events which need to be streamed into the database. It should be done asynchronously to improve performance as there is no benefit to the normal rest synchronous call, especially considering the way that synchronous calls would limit scalability. Additionally, to ensure scalability of this event stream, we will introduce a Kafka queue. At the front end, we will implement the restful endpoint for validation purposes. After validation, a response of '202' will be immediately returned without processing the message. The message itself will be published to a topic in Kafka. On the backside, a dedicated consumer will consume the messages and process them. This will facilitate throughput and enable scalability.
+
