@@ -14,6 +14,16 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
 
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  # Use any version between 15.2.31.300 and 15.2.31.570
+  #config.vm.box = "opensuse/Leap-15.2.x86_64"
+  #config.vm.box_version = "15.2.31.354"
+
+  config.vm.box = "opensuse/Leap-15.2.x86_64"
+  #config.vm.box_version = "15.2.31.354"
+
+
   config.vm.define "master" do |master|
     master.vm.box = default_box
     master.vm.hostname = "master"
@@ -25,7 +35,10 @@ Vagrant.configure("2") do |config|
       master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
       end
     master.vm.provider "virtualbox" do |v|
-      v.memory = "3072"
+      #v.memory = "3072"
+      v.memory = "4096"
+      #vb.memory = "2048"
+      v.cpus = 4
       v.name = "master"
       end
     master.vm.provision "shell", inline: <<-SHELL

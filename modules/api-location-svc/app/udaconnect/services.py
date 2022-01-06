@@ -1,14 +1,13 @@
 import logging
 import json
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict
 from app import db
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 from flask import g, Response
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
-
 
 class LocationService:
     @staticmethod
@@ -33,7 +32,7 @@ class LocationService:
         TOPIC_NAME = 'location'
         KAFKA_SERVER = 'kafka:9092'
         try:
-            logging.info('Sending kafka message: ')
+            logging.info('Sending kafka message with person_id = %s', location["person_id"])
             send_bytes = json.dumps(location).encode('utf-8')
             kafka_producer = g.kafka_producer
             kafka_producer.send(TOPIC_NAME, send_bytes)
@@ -47,12 +46,5 @@ class LocationService:
             logging.info(f"response: {response}")
         return response
 
-    @staticmethod
-    def kafka_consumed_create(location: Dict):
-        new_location = Location()
-        new_location.person_id = location["person_id"]
-        new_location.creation_time = location["creation_time"]
-        new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
-        db.session.add(new_location)
-        db.session.commit()
+
     

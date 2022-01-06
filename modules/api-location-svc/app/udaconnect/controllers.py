@@ -18,7 +18,6 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 #locations. Posts will be published to a kafka queue with a 
 #response=202 returned immediatly after request validation.
 
-
 @api.route("/locations")
 class LocationResource(Resource):
     @accepts(schema=LocationSchema)

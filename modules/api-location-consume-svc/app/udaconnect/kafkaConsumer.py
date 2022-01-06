@@ -1,8 +1,7 @@
 import logging
 from kafka import KafkaConsumer
 import threading
-import time
-from typing import List
+from typing import Dict, List
 import json
 from json import loads
 from app.udaconnect.services import LocationService
@@ -10,7 +9,7 @@ from app.udaconnect.services import LocationService
 TOPIC_NAME = 'location'
 KAFKA_SERVER = 'kafka:9092'
 
-def kafka_consumer(time):
+def kafka_consumer(app_context):
 
     consumer = KafkaConsumer(
         bootstrap_servers=KAFKA_SERVER,
@@ -21,12 +20,13 @@ def kafka_consumer(time):
     while True:
         for message in consumer:
             result = json.loads(message.value.decode('utf-8'))
-            logging.info('Received kafka message: ')
-            LocationService.kafka_consumed_create(result)
-    
+            logging.info('Received kafka message for person_id = %s', result["person_id"])
+            with app_context:
+                LocationService.kafka_consumed_create(result)
+        
   
 def start_server(app_context):
-    logging.info('Starting server')
-    t = threading.Thread(target=kafka_consumer, args=[1])
+    logging.info('Starting kafka consuming thread')
+    t = threading.Thread(target=kafka_consumer, args=[app_context])
     t.start()
-    logging.info('Consuming from kafka on: %s', {KAFKA_SERVER})
+    logging.info('Consumer startup completed. Consuming from kafka on: %s', KAFKA_SERVER)

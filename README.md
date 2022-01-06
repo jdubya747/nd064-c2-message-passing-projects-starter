@@ -87,6 +87,7 @@ Afterwards, you can test that `kubectl` works by running a command like `kubectl
 7. `kubectl apply -f deployment/kafka-deployment.yaml` - Set up the kafka queuing deployment
 8. `kubectl apply -f deployment/udaconnect-api.yaml` - Set up the service and deployment for the Connection Microservice
 9. `kubectl apply -f deployment/udaconnect-location-svc.yaml` - Set up the service and deployment for the Location Microservice
+9. `kubectl apply -f deployment/udaconnect-location-consume-svc.yaml` - Set up the service that consumes location messages from kafka and processes them
 10. `kubectl apply -f deployment/udaconnect-api-people-svc.yaml` - Set up the service and deployment for the People Microservice
 11. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
 12. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
@@ -97,7 +98,7 @@ Note: The first time you run this project, you will need to seed the database wi
 
 ### Verifying it Works
 Once the project is up and running, you should be able to see 3 deployments and 3 services in Kubernetes:
-`kubectl get pods` and `kubectl get services` - should both return `udaconnect-app`, `udaconnect-api-people-svc`, `udaconnect-api-location-svc`, `udaconnect-api`, `zookeeper`, `kafka`, and `postgres`
+`kubectl get pods` and `kubectl get services` - should both return `udaconnect-app`, `udaconnect-api-people-svc`, `udaconnect-api-location-svc`, `udaconnect-api-location-consume-svc`,`udaconnect-api`, `zookeeper`, `kafka`, and `postgres`
 
 
 These pages should also load on your web browser:
@@ -124,8 +125,8 @@ As a reminder, each module should have:
 3. `requirements.txt` for `pip` packages
 4. `__init__.py`
 
-### Docker Images
-`udaconnect-app` and `udaconnect-api` use docker images from `isjustintime/udaconnect-app` and `isjustintime/udaconnect-api`. To make changes to the application, build your own Docker image and push it to your own DockerHub repository. Replace the existing container registry path with your own.
+### Docker Images (deprecated)
+#`udaconnect-app` and `udaconnect-api` use docker images from `isjustintime/#udaconnect-app` and `isjustintime/udaconnect-api`. To make changes to the #application, build your own Docker image and push it to your own DockerHub #repository. Replace the existing container registry path with your own.
 
 ## Configs and Secrets
 In `deployment/db-secret.yaml`, the secret variable is `d293aW1zb3NlY3VyZQ==`. The value is simply encoded and not encrypted -- this is ***not*** secure! Anyone can decode it to see what it is.
