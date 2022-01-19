@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   #config.vm.box_version = "15.2.31.354"
 
   config.vm.box = "opensuse/Leap-15.2.x86_64"
-  #config.vm.box_version = "15.2.31.354"
+  config.vm.box_version = "15.2.31.354"
 
 
   config.vm.define "master" do |master|
